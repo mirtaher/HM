@@ -1,3 +1,4 @@
+//testing git Just testing
 capture log close
 cd /Users/Mohsen/Desktop/HM
 log using hm_data02, replace text 
@@ -412,8 +413,8 @@ replace dumr = dumr + duBmr if !missing(duBmr)
 replace dudv = dudv + duBdv if !missing(duBdv)
 
 
+// Constructing BMI
 
-* Constructing BMI
 numlist "1981 1982 1986 1988 1990 1992 1993 1994(2)2012"
 local wy "`r(numlist)'"
 local duration mr dv wd sg
@@ -441,6 +442,26 @@ egen `ms'bmi =  rowmean(`l`ms'')
 gen `ms'bmiH = cond(18.5 <= `ms'bmi & `ms'bmi < 25 , 1, 0)
 replace `ms'bmiH = . if missing(`ms'bmi)
 }
+
+
+// BMI in each rank of marriage and divorce 
+local  rnk_m_spel = 3
+
+forvalues i = 1/`rnk_m_spel'{
+foreach ms in mr dv{
+local l`ms'`i'
+foreach y of local wy{
+gen `ms'mrk`y'_`i' = .
+replace `ms'mrk`y'_`i' = 1 if `ms'S`y' == `i'
+gen `ms'prdct`y'_`i' = `ms'mrk`y'_`i' * `ms'bmi`y' 
+local l`ms'`i' `l`ms'`i'' `ms'prdct`y'_`i'
+}
+egen `ms'bmi_S`i' = rowmean(`l`ms'`i'')
+gen `ms'bmiH_S`i' = cond(18.5 <= `ms'bmi_S`i' & `ms'bmi _S`i'< 25 , 1, 0)
+replace `ms'bmiH_S`i' = . if missing(`ms'bmi_S`i')
+}
+}
+
 
 
 */
