@@ -15,8 +15,8 @@ numlist "1980/1994 1996(2)2012"
 local iy "`r(numlist)'"
 
 
-/*
 
+//////////////////////////////////////////////////
 // Creating race dummies 
 
 tabulate race, gen (gr)
@@ -33,6 +33,8 @@ rename sex male
 
 gen age2012 = age82 + 30 
 
+
+///////////////////////////////////////////////////
 // Creating Health Categories 
 tabulate sf_slf_hlt_40, gen(sffo)
 rename sffo1 slfH40E
@@ -66,8 +68,6 @@ replace num_chp = num_chp + `var' if !missing(`var')
 
 * Common chronic health problems 
 
-//Creating the education categories 
-
 local cd  ccr_bp_40
 foreach var of varlist ccr_bp_40-ccr_ar_40{
 local cd `cd' `var'
@@ -83,6 +83,9 @@ replace num_cd = num_cd + `var' if !missing(`var')
 
 gen num_c = num_chp + num_cd 
 
+//////////////////////////////////////////////////////////////
+//Creating the education categories 
+
 * First approach: The latest available data
 
 numlist " 2012(-2)1996 1994(-1)1980" 
@@ -94,7 +97,6 @@ gen hgc = .
 foreach y of local iyr {
 replace  hgc = hg`y' if  !missing(hg`y') & `ii' == 0 
 local ii = `ii' + 1 
-
 }
 
 
@@ -117,10 +119,6 @@ local hsd_ag `hsd_ag' hsd`var'
 egen hsDp = rowmax(`hsd_ag') 
 
 
-
-
-
-
 gen col = 1 if hgc > = 16 & !missing(hgc)
 replace col = 0 if hgc<16 & !missing(hgc)
 
@@ -130,112 +128,11 @@ replace scl = 1 if (hgc>12) & (hgc<16) & !missing(hgc)
 gen hs = hsDp
 replace hs = 0 if hsDp==1 & (col ==1 | scl ==1) & !missing(hgc)
 
-// Creating the marital history variables 
 
 
+///////////////////////////////////////////////////////////////////////
+// Calculation of marital state variables: instanteneous and cumulative 
 
-
-* Initial levels of Marriage, Divorce, Widowhood, and Reunion 
-gen M = 0 
-replace M = num_m1979 if !missing(num_m1979)
-replace M = 1 if ms1979 == 1 & missing(num_m1979)
-
-gen D = 0 
-replace  D = 1 if (ms1979 == 3 | ms1979 == 4) & num_m1979 == 1 
-replace D = 2 if ms1979 == 3 & num_m1979==2
-
-gen W = 0 
-replace W = 1 if ms1979 == 2 
-
-gen R = 0
-
-* Counting the number Marriage, Divorce, Reunion, and Widowhood 
-
-foreach var of local iy{
-*levelsof(Fchm`var'), local(status`var')
-*local v: word count of `status`var''
-
-if `var' == 1980 {
-foreach round of newlist F S T{
-replace M = M + 1 if chm`var' == 1 & (`round'chm`var' == 1 |  `round'chm`var' == 4)
-replace D = D + 1 if chm`var' == 1 & (`round'chm`var' == 3 |  `round'chm`var' == 2)
-replace W = W + 1 if chm`var' == 1 &  `round'chm`var' == 5
-}
-}
-else {
-foreach round of newlist F S T{
-replace M = M + 1 if chm`var' == 1 & (`round'chm`var' == 1 |  `round'chm`var' == 5)
-replace D = D + 1 if chm`var' == 1 & (`round'chm`var' == 3 |  `round'chm`var' == 2)
-replace W = W + 1 if chm`var' == 1 &  `round'chm`var' == 6
-replace R = R + 1 if chm`var' == 1 &  `round'chm`var' == 4
-}
-}
-}
-
-* Treating reunion as remarriage 
-replace M = M + R 
-
-* Creating marriage categories 
-gen Mrd = 0 
-replace Mrd = 1 if M > D + W  
-
-gen cMrd = 0
-replace cMrd = 1 if M ==1 & D + W == 0 
-
-gen rMrd = 0 
-replace rMrd = 1 if Mrd == 1 & cMrd == 0 
-
-gen pMrd = 0 
-replace pMrd = 1 if M <= D + W & M > 0 
-
-gen nMrd =0
-replace nMrd = 1 if M == 0 & D == 0 & W == 0 
-
-gen rMrdD = 0
-replace rMrdD = 1 if M > D + W & M ==2 & D == 1
-
-gen rMrdW = 0 
-replace rMrdW = 1 if M > D + W & M ==2 & W == 1
-
-gen rMrdT = 0 
-replace rMrdT = 1 if M >= 3 & D + W >= 2 
-
-gen pMrdD = 0 
-replace pMrdD = 1 if M == 1 & D == 1 & W == 0 
-
-gen pMrdW = 0 
-replace pMrdW = 1 if M == 1 & D == 0 & W == 1
-
-gen pMrdT = 0
-replace pMrdT = 1 if M >= 2 & M <= D + W   
-
-
-
-
-
-* Age at first marriage 
-
-forvalues var = 71/79{
-recode fms_y (`var'  = `= 1900 + `var'')
-recode rms_y (`var'  = `= 1900 + `var'')
-}
-
-replace fms_y = rms_y if missing(fms_y)
-
-foreach var of local iy {
-foreach round of newlist F S T{
-replace fms_y = `var' if chm`var' == 1 &   (`round'chm`var' == 1)  & missing(fms_y) 
-}
-replace fms_y = .a if nMrd == 1 
-}
-
-gen afm = age82 + (fms_y - 1982) if fms_y != 0 
-replace afm = .a if fms_y == .a
-lab var afm "Age at first marriage"
-
-*/
-
-* Calculation marital durations
 
 tabulate ms1979, gen(g)
 rename g1 mr1979
@@ -244,7 +141,7 @@ gen dv1979 = g3 + g4
 rename g5 sg1979
 drop g3 g4
 
-// The initial values (1979) of marital stock state variables
+** The initial values (1979) of marital stock state variables
 
 * For singles in 1979
 foreach var in mr dv wd sg{
@@ -319,7 +216,7 @@ replace `var'`=`y' - `j'' = 0 if `round'diff`y' == `i' & `round'chm`y' == 6
 }
 
 replace dv`=`y' - `j'' = 1 if `round'diff`y' == `i' & (`round'chm`y' == 2 | `round'chm`y' == 3)
-*replace dvS`=`y' - `j'' = dvS`=`y' - `j' - 1' + 1 if `round'diff`y' == `i' & (`round'chm`y' == 2 | `round'chm`y' == 3)
+
 
 foreach var of newlist mr wd sg {
 replace `var'`=`y' - `j'' = 0 if `round'diff`y' == `i' & (`round'chm`y' == 2 | `round'chm`y' == 3)
@@ -331,11 +228,8 @@ replace `var'`=`y' - `j'' = 0 if `round'diff`y' == `i' & (`round'chm`y' == 2 | `
 
 
 assert mr`y' + dv`y' + wd`y' + sg`y' == 1 if !missing(mr`y') & !missing(dv`y') & !missing(wd`y') & !missing(sg`y')
-*list mr`y' dv`y' wd`y' sg`y' if mr`y' + dv`y'+ wd`y' + sg`y' != 1 /*if  !missing(mr`y') & !missing(dv`y') & !missing(wd`y') & !missing(sg`y') */
+
 }
-
-
-
 
 * Taking into acount the fact that the divorce that happens after separation is considered as one divorce 
 forvalues y = 1980/2012{
@@ -343,55 +237,70 @@ replace dvS`y' = dvS`= `y' - 1' + 1 if dv`y' - dv`= `y' - 1' == 1
 replace dvS`y' = dvS`= `y' - 1'     if dv`y' - dv`= `y' - 1' != 1 
 }
 
+//////////////////////////////////////////////////////////////////////
+// Calculating marital categories and number of marriages, divorces, and widowhoods
+
+** Number of marriages, divorces, and widowhoods 
+local num_year: word count of `iy' 
+display `num_year'
+tokenize `iy'
+* It's wierd that the count command, counts one more extra
+local last = `= `num_year' - 1' 
+
+* Initial levels of Marriage, Divorce, Widowhood, and Reunion 
+gen M = 0 
+replace M = num_m1979 if !missing(num_m1979)
+replace M = 1 if ms1979 == 1 & missing(num_m1979)
+replace M = M + mrS``last''
+
+gen D = 0 
+replace  D = 1 if (ms1979 == 3 | ms1979 == 4) & num_m1979 == 1 
+replace D = 2 if ms1979 == 3 & num_m1979==2
+replace D = D + dvS``last''
+
+gen W = 0 
+replace W = 1 if ms1979 == 2 
+replace W = W + wdS``last''
 
 
-/*
+* Creating marriage categories 
+gen Mrd = 0 
+replace Mrd = 1 if M > D + W  
 
-/*
+gen cMrd = 0
+replace cMrd = 1 if M ==1 & D + W == 0 
 
-* The code for the case that we assume that date of change is the same as 
-* when the change is reported 
+gen rMrd = 0 
+replace rMrd = 1 if Mrd == 1 & cMrd == 0 
 
+gen pMrd = 0 
+replace pMrd = 1 if M <= D + W & M > 0 
 
-foreach y of local iy{
+gen nMrd =0
+replace nMrd = 1 if M == 0 & D == 0 & W == 0 
 
-foreach var of newlist mr wd dv sg{
-if `y' <= 1994{
-gen `var'`y' = `var'`=`y' - 1'
-}
-if `y' > 1994 {
-gen `var'`y' = `var'`=`y' - 2'
-}
-}
+gen rMrdD = 0
+replace rMrdD = 1 if M > D + W & M ==2 & D == 1
 
+gen rMrdW = 0 
+replace rMrdW = 1 if M > D + W & M ==2 & W == 1
 
-foreach round of newlist F S T {
+gen rMrdT = 0 
+replace rMrdT = 1 if M >= 3 & D + W >= 2 
 
+gen pMrdD = 0 
+replace pMrdD = 1 if M == 1 & D == 1 & W == 0 
 
-replace mr`y' = 1 if `round'chm`y' == 1 | `round'chm`y' == 5 | `round'chm`y' == 4
+gen pMrdW = 0 
+replace pMrdW = 1 if M == 1 & D == 0 & W == 1
 
-
-foreach var of newlist dv wd sg {
-replace `var'`y' = 0 if (`round'chm`y' == 1 | `round'chm`y' == 5 | `round'chm`y' == 4) 
-}
-
-replace wd`y' = 1 if `round'chm`y' == 6
-
-foreach var of newlist dv mr sg {
-replace `var'`y' = 0 if `round'chm`y' == 6
-}
-
-replace dv`y' = 1 if `round'chm`y' == 2 | `round'chm`y' == 3
-
-foreach var of newlist mr wd sg {
-replace `var'`y' = 0 if `round'chm`y' == 2 | `round'chm`y' == 3
-}
-
-}  
-*/
+gen pMrdT = 0
+replace pMrdT = 1 if M >= 2 & M <= D + W  
 
 
-* Calculating durations of marriage, Divorce, widowhood, and singlehood 
+
+//////////////////////////////////////////////////////////////////////
+// Calculating durations of marriage, Divorce, widowhood, and singlehood 
 gen dumr = mr1979
 gen dusg = sg1979
 gen duwd = wd1979
@@ -425,6 +334,30 @@ replace dumr = dumr + duBmr if !missing(duBmr)
 replace dudv = dudv + duBdv if !missing(duBdv)
 
 
+/////////////////////////////////////////////////////////////////////
+* Age at first marriage 
+
+forvalues var = 71/79{
+recode fms_y (`var'  = `= 1900 + `var'')
+recode rms_y (`var'  = `= 1900 + `var'')
+}
+
+replace fms_y = rms_y if missing(fms_y)
+
+foreach var of local iy {
+foreach round of newlist F S T{
+replace fms_y = `var' if chm`var' == 1 &   (`round'chm`var' == 1)  & missing(fms_y) 
+}
+replace fms_y = .a if nMrd == 1 
+}
+
+gen afm = age82 + (fms_y - 1982) if fms_y != 0 
+replace afm = .a if fms_y == .a
+lab var afm "Age at first marriage"
+
+
+
+/////////////////////////////////////////////////////////////////////////////
 // Constructing BMI
 
 numlist "1981 1982 1986 1988 1990 1992 1993 1994(2)2012"
@@ -457,6 +390,7 @@ replace `ms'bmiH = . if missing(`ms'bmi)
 
 
 // BMI in each rank of marriage and divorce 
+
 local  rnk_m_spel = 3
 
 forvalues i = 1/`rnk_m_spel'{
@@ -476,7 +410,7 @@ replace `ms'bmiH_S`i' = . if missing(`ms'bmi_S`i')
 
 
 
-*/
+
 save hm-data02, replace 
 log close 
 exit
