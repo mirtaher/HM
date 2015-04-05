@@ -1,4 +1,4 @@
-//testing git Just testing
+
 capture log close
 cd /Users/Mohsen/Desktop/HM
 log using hm_data02, replace text 
@@ -14,6 +14,8 @@ use hm-data01.dta, clear
 numlist "1980/1994 1996(2)2012" 
 local iy "`r(numlist)'"
 
+
+/*
 
 // Creating race dummies 
 
@@ -231,7 +233,7 @@ gen afm = age82 + (fms_y - 1982) if fms_y != 0
 replace afm = .a if fms_y == .a
 lab var afm "Age at first marriage"
 
-
+*/
 
 * Calculation marital durations
 
@@ -317,7 +319,7 @@ replace `var'`=`y' - `j'' = 0 if `round'diff`y' == `i' & `round'chm`y' == 6
 }
 
 replace dv`=`y' - `j'' = 1 if `round'diff`y' == `i' & (`round'chm`y' == 2 | `round'chm`y' == 3)
-replace dvS`=`y' - `j'' = dvS`=`y' - `j' - 1' + 1 if `round'diff`y' == `i' & (`round'chm`y' == 2 | `round'chm`y' == 3)
+*replace dvS`=`y' - `j'' = dvS`=`y' - `j' - 1' + 1 if `round'diff`y' == `i' & (`round'chm`y' == 2 | `round'chm`y' == 3)
 
 foreach var of newlist mr wd sg {
 replace `var'`=`y' - `j'' = 0 if `round'diff`y' == `i' & (`round'chm`y' == 2 | `round'chm`y' == 3)
@@ -334,6 +336,16 @@ assert mr`y' + dv`y' + wd`y' + sg`y' == 1 if !missing(mr`y') & !missing(dv`y') &
 
 
 
+
+* Taking into acount the fact that the divorce that happens after separation is considered as one divorce 
+forvalues y = 1980/2012{
+replace dvS`y' = dvS`= `y' - 1' + 1 if dv`y' - dv`= `y' - 1' == 1
+replace dvS`y' = dvS`= `y' - 1'     if dv`y' - dv`= `y' - 1' != 1 
+}
+
+
+
+/*
 
 /*
 
