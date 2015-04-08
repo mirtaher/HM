@@ -1,22 +1,17 @@
-\input{HelperFile.tex}
-\begin{document}
-
-\begin{table}[t]
-\footnotesize
-\caption{S-12 Mental Score at age 40 as the outcome variable}
-\label{tab: SF12 Mental 50}
-
-\begin{tabular}{p{4cm}ccc} \toprule
-                &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         \\\toprule
-\makebox[4cm][l]{\bfseries Currently Remarried} &   -79.85\sym{**} &                  &                  \\
-\makebox [4cm] [c]{One Divorce}    &                  &   -30.30         &                  \\
-\makebox [4cm] [c]{One Widowhood}   &                  &   -12.43         &                  \\
-\makebox [4cm] [c]{Multiple Disruptions} &                  &   -197.2\sym{***}&                  \\
-\bfseries Previously Married&   -206.1\sym{***}&                  &                  \\
-\makebox [4cm] [c]{One Divorce}    &                  &   -205.2\sym{***}&                  \\
-\makebox [4cm] [c]{One Widowhood }  &                  &   -55.70         &                  \\
-\makebox [4cm] [c]{Multiple Disruptions} &                  &   -174.1\sym{***}&                  \\
-\bfseries Never Married   &   -205.6\sym{***}&   -195.6\sym{***}&                  \\
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{sf\_12\_mnt\_40 as the outcome variable}
+\begin{tabular}{l*{3}{c}}
+                &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         \\
+Currently Remarried&   -79.85\sym{**} &                  &                  \\
+One Divorce     &                  &   -30.30         &                  \\
+One Widowhood   &                  &   -12.43         &                  \\
+Multiple Disruptions&                  &   -197.2\sym{***}&                  \\
+Previously Married&   -206.1\sym{***}&                  &                  \\
+One Divorce     &                  &   -205.2\sym{***}&                  \\
+One Widowhood   &                  &   -55.70         &                  \\
+Multiple Disruptions&                  &   -174.1\sym{***}&                  \\
+Never Married   &   -205.6\sym{***}&   -195.6\sym{***}&                  \\
 Number of years in marriage&                  &                  &    0.273         \\
 Number of years in divorce&                  &                  &    0.471         \\
 Age at 2012     &    0.591         &   -0.482         &    1.222         \\
@@ -30,11 +25,10 @@ Very Good Initial Health&   -56.77\sym{*}  &   -55.69\sym{*}  &   -58.93\sym{*} 
 Good Initial Health&   -109.3\sym{***}&   -110.5\sym{***}&   -119.3\sym{***}\\
 Fair Initial Health&   -358.4\sym{***}&   -359.2\sym{***}&   -374.5\sym{***}\\
 Poor Initial Health&   -515.2\sym{***}&   -510.0\sym{***}&   -540.4\sym{***}\\
-Constant        &   5138.4\sym{***}&   5182.0\sym{***}&   4985.7\sym{***}\\\midrule
+Constant        &   5138.4\sym{***}&   5182.0\sym{***}&   4985.7\sym{***}\\
 Observations    &     6872         &     6872         &     6871         \\
-Adjusted \(R^{2}\)&    0.048         &    0.051         &    0.038         \\\bottomrule
-\multicolumn{4}{l}{\footnotesize Outcome Variable: sf\_12\_mnt\_40. The estimates are obtained using OLS}\\
+Adjusted \(R^{2}\)&    0.048         &    0.051         &    0.038         \\
+\multicolumn{4}{l}{\footnotesize The estimates are obtained using reg. The reference group for race, education, and intial health subjective assessment are white, high school dropout, and excellect initial health, respectively.}\\
 \multicolumn{4}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
 \end{tabular}
 \end{table}
-\end{document}
