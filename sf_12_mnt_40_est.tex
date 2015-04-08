@@ -1,0 +1,37 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{c}}
+                &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         \\
+Currently Remarried&   -79.85\sym{**} &                  &                  \\
+One Divorce     &                  &   -30.30         &                  \\
+One Widowhood   &                  &   -12.43         &                  \\
+Multiple Disruptions&                  &   -197.2\sym{***}&                  \\
+Previously Married&   -206.1\sym{***}&                  &                  \\
+One Divorce     &                  &   -205.2\sym{***}&                  \\
+One Widowhood   &                  &   -55.70         &                  \\
+Multiple Disruptions&                  &   -174.1\sym{***}&                  \\
+nMrd            &   -205.6\sym{***}&   -195.6\sym{***}&                  \\
+# years in marriage&                  &                  &    0.273         \\
+# years in divorce&                  &                  &    0.471         \\
+Age at 2012     &    0.591         &   -0.482         &    1.222         \\
+Male            &    219.8\sym{***}&    220.7\sym{***}&    228.9\sym{***}\\
+Black           &    82.59\sym{***}&    80.07\sym{***}&    38.62         \\
+Hispanic        &    70.72\sym{**} &    67.02\sym{*}  &    58.38\sym{*}  \\
+High School Diploma&    125.1\sym{***}&    127.1\sym{***}&    142.8\sym{***}\\
+Some College    &    194.5\sym{***}&    197.0\sym{***}&    215.0\sym{***}\\
+College Degree  &    186.8\sym{***}&    190.1\sym{***}&    234.5\sym{***}\\
+Very Good Initial Health&   -56.77\sym{*}  &   -55.69\sym{*}  &   -58.93\sym{*}  \\
+Good Initial Health&   -109.3\sym{***}&   -110.5\sym{***}&   -119.3\sym{***}\\
+Fair Initial Health&   -358.4\sym{***}&   -359.2\sym{***}&   -374.5\sym{***}\\
+Poor Initial Health&   -515.2\sym{***}&   -510.0\sym{***}&   -540.4\sym{***}\\
+chlt2012==2     &        0         &        0         &        0         \\
+chlt2012==3     &        0         &        0         &        0         \\
+chlt2012==4     &        0         &        0         &        0         \\
+chlt2012==5     &        0         &        0         &        0         \\
+Constant        &   5138.4\sym{***}&   5182.0\sym{***}&   4985.7\sym{***}\\
+Observations    &     6872         &     6872         &     6871         \\
+Adjusted \(R^{2}\)&    0.048         &    0.051         &    0.038         \\
+\multicolumn{4}{l}{\footnotesize Outcome Variable: sf\_12\_mnt\_40}\\
+\multicolumn{4}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+}
