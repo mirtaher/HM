@@ -21,17 +21,23 @@ local iy "`r(numlist)'"
 
 tabulate race, gen (gr)
 rename gr1 hispanic 
-rename gr2 black 
+lab var hispanic "Hispanic"
+
+rename gr2 black
+lab var  black "Black"
+
 drop gr3 
 
 // Creating Male dummy
 
 recode sex (2 = 0)
 rename sex male 
+label var male "Male"
 
 // Age at 2012 
 
 gen age2012 = age82 + 30 
+label var age2012 "Age at 2012"
 
 
 ///////////////////////////////////////////////////
@@ -50,6 +56,13 @@ rename sffi3 slfH50G
 rename sffi4 slfH50F
 rename sffi5 slfH50P
 
+// Creating initial health categories 
+tabulate chlt2012, gen(inh)
+lab var inh1 "Excellent Initial Health"
+lab var inh2 "Very Good Initial Health"
+lab var inh3 "Good Initial Health"
+lab var inh4 "Fair Initial Health"
+lab var inh5 "Poor Initial Health"
 
 // Creating the number of chronic health problems from 40+ health modules 
 
@@ -82,6 +95,7 @@ replace num_cd = num_cd + `var' if !missing(`var')
 * Total number of chronic problems 
 
 gen num_c = num_chp + num_cd 
+lab var num_c "Total number of chronic diseases"
 
 //////////////////////////////////////////////////////////////
 //Creating the education categories 
@@ -121,13 +135,15 @@ egen hsDp = rowmax(`hsd_ag')
 
 gen col = 1 if hgc > = 16 & !missing(hgc)
 replace col = 0 if hgc<16 & !missing(hgc)
+lab var col "College Degree"
 
 gen scl = 0 if !missing(hgc)
 replace scl = 1 if (hgc>12) & (hgc<16) & !missing(hgc)
+lab var scl "Some College"
 
 gen hs = hsDp
 replace hs = 0 if hsDp==1 & (col ==1 | scl ==1) & !missing(hgc)
-
+lab var hs "High School Diploma"
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -266,36 +282,47 @@ replace W = W + wdS``last''
 * Creating marriage categories 
 gen Mrd = 0 
 replace Mrd = 1 if M > D + W  
+label var Mrd "Currently Married"
 
 gen cMrd = 0
 replace cMrd = 1 if M ==1 & D + W == 0 
+label var cMrd "Continuously Married"
 
 gen rMrd = 0 
 replace rMrd = 1 if Mrd == 1 & cMrd == 0 
+label var rMrd "Currently Remarried"
 
 gen pMrd = 0 
 replace pMrd = 1 if M <= D + W & M > 0 
+label var pMrd "Previously Married"
 
 gen nMrd =0
 replace nMrd = 1 if M == 0 & D == 0 & W == 0 
+label var cMrd "Continuously Married"
 
 gen rMrdD = 0
 replace rMrdD = 1 if M > D + W & M ==2 & D == 1
+label var rMrdD "One Divorce"
 
 gen rMrdW = 0 
 replace rMrdW = 1 if M > D + W & M ==2 & W == 1
+label var rMrdW "One Widowhood"
 
 gen rMrdT = 0 
 replace rMrdT = 1 if M >= 3 & D + W >= 2 
+label var rMrdT "Multiple Disruptions"
 
 gen pMrdD = 0 
 replace pMrdD = 1 if M == 1 & D == 1 & W == 0 
+label var pMrdD "One Divorce"
 
 gen pMrdW = 0 
 replace pMrdW = 1 if M == 1 & D == 0 & W == 1
+label var pMrdW "One Widowhood"
 
 gen pMrdT = 0
 replace pMrdT = 1 if M >= 2 & M <= D + W  
+label var pMrdT "Multiple Disruptions"
 
 
 
@@ -331,7 +358,10 @@ replace duBmr = duBmr + duBmr2 if !missing(duBmr2)
 
 * Correcting for dumr dudv
 replace dumr = dumr + duBmr if !missing(duBmr)
+lab var dumr "# years in marriage"
+
 replace dudv = dudv + duBdv if !missing(duBdv)
+lab var dudv "# years in divorce"
 
 
 /////////////////////////////////////////////////////////////////////

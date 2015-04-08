@@ -1,6 +1,13 @@
-{
-\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{3}{c}}
+\input{HelperFile.tex}
+\begin{document}
+
+\begin{table}[tp]
+\footnotesize
+\caption{TBD}
+\label{tab: SF12 Mental 50}
+
+
+\begin{tabular}{p{4cm}ccc}
                 &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         \\
 Currently Remarried&   -79.85\sym{**} &                  &                  \\
 One Divorce     &                  &   -30.30         &                  \\
@@ -34,4 +41,6 @@ Adjusted \(R^{2}\)&    0.048         &    0.051         &    0.038         \\
 \multicolumn{4}{l}{\footnotesize Outcome Variable: sf\_12\_mnt\_40}\\
 \multicolumn{4}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
 \end{tabular}
-}
+
+\end{table}
+\end{document}
