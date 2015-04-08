@@ -298,7 +298,7 @@ label var pMrd "Previously Married"
 
 gen nMrd =0
 replace nMrd = 1 if M == 0 & D == 0 & W == 0 
-label var cMrd "Continuously Married"
+label var nMrd "Never Married"
 
 gen rMrdD = 0
 replace rMrdD = 1 if M > D + W & M ==2 & D == 1
@@ -358,10 +358,10 @@ replace duBmr = duBmr + duBmr2 if !missing(duBmr2)
 
 * Correcting for dumr dudv
 replace dumr = dumr + duBmr if !missing(duBmr)
-lab var dumr "# years in marriage"
+lab var dumr "Number of years in marriage"
 
 replace dudv = dudv + duBdv if !missing(duBdv)
-lab var dudv "# years in divorce"
+lab var dudv "Number of years in divorce"
 
 
 /////////////////////////////////////////////////////////////////////
